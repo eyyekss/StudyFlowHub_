@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Font Awesome Icons-->
+        <script src="https://kit.fontawesome.com/efef0daf69.js" crossorigin="anonymous"></script>
+        <!-- Font Awesone cdn -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <!-- Material Icons -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <!-- Font -->
+        <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+        <link href="https://fonts.cdnfonts.com/css/college" rel="stylesheet">
+        <link href="https://www.dafontfree.net/embed/emluZy1ydXN0LWRlbW8tYmFzZSZkYXRhLzkxL3ovMTY3NDM4L1ppbmdSdXN0RGVtby1CYXNlLm90Zg" rel="stylesheet" type="text/css"/>
+        <link rel="icon" href="ImageSources/SHS-logo.png" type="image/x-icon">
+        <link rel="stylesheet" href="ComputePage.css">
+        <title>𝗢𝘂𝘁𝗽𝘂𝘁 𝗧𝗿𝗮𝗰𝗸𝗲𝗿</title>
+    </head>
+    <body>
+        <!-- NavBar -->
+        <nav class="sticky-nav">
+            <div class="nav-wrapper" style="background-color: #023B1A">
+                <a class="nav-logo" href="MainPage.html" style="margin-left: 30px;">
+                   <img src="ImageSources/Web-Logo-White.png" alt="PinnaCle" width="80px" height="50px" style="margin-top: 7px;">
+                </a>
+
+                <ul class="right hide-on-med-and-down" style="margin-right: 20px;">
+                    <li>
+                        <a href="MainPage.html" style="color: #ffffff;">Back
+                            <i class="fa-solid fa-arrow-left left" style="color: #ffffff;"></i>
+                        </a>
+                    </li> 
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Hamburger Menu Bar -->
+        <a href="#" style="color: #ffffff;"  data-target="mobile-demo" class="sidenav-trigger">
+            <i class="fas fa-bars fixed-hamburger" style="color: #ffffff;"></i>
+        </a>
+        
+        <!-- SideNav -->
+        <ul class="sidenav left-align" id="mobile-demo" style="overflow: hidden; border-radius: 35px;">
+            <img src="ImageSources/SideNav-ProfilePic.png" width="150px" height="150px" style="margin-top: 100px; margin-left: 75px;">
+            <h5 class="sideNav-Name">John Doe</h5>
+                    
+            <div class="sideNav-Items">
+                <li><a href="#About" style="font-size: 17px;">
+                        <i class="fa-regular fa-user"></i>My Profile
+                    </a>
+                </li>
+                <li><a href="#Contact" style="font-size: 17px;">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>Logout
+                    </a>
+                </li>
+            </div>
+        </ul>
+
+        <script>
+            // Define the JavaScript functions
+            function generateWrittenWorksInputs(subject) {
+                const numWrittenWorks = parseInt(document.getElementById(`numWrittenWorks${subject}`).value) || 0;
+                const WrittenWorksInputsDiv = document.getElementById(`WrittenWorksInputs${subject}`);
+                WrittenWorksInputsDiv.innerHTML = '';
+
+                for (let i = 1; i <= numWrittenWorks; i++) {
+                    const divRow = document.createElement('div');
+                    divRow.classList.add('row');
+
+                    const rawScoreColumn = document.createElement('div');
+                    rawScoreColumn.classList.add('col', 's6', 'm6', 'l6');
+
+                    const maxScoreColumn = document.createElement('div');
+                    maxScoreColumn.classList.add('col', 's6', 'm6', 'l6');
+
+                    const rawScoreInput = document.createElement('input');
+                    rawScoreInput.type = 'number';
+                    rawScoreInput.placeholder = `WW ${i} (Your Score)`;
+                    rawScoreInput.id = `qz${i}Raw${subject}`;
+                    rawScoreColumn.appendChild(rawScoreInput);
+
+                    const maxScoreInput = document.createElement('input');
+                    maxScoreInput.type = 'number';
+                    maxScoreInput.placeholder = 'Total Possible Score';
+                    maxScoreInput.id = `qz${i}Max${subject}`;
+                    maxScoreColumn.appendChild(maxScoreInput);
+
+                    divRow.appendChild(rawScoreColumn);
+                    divRow.appendChild(maxScoreColumn);
+                    WrittenWorksInputsDiv.appendChild(divRow);
+                }
+            }
+
+            function calculateGrade(subject) {
+                const numWrittenWorks = parseInt(document.getElementById(`numWrittenWorks${subject}`).value) || 0;
+
+                let quizTotal = 0;
+                for (let i = 1; i <= numWrittenWorks; i++) {
+                    const rawScore = parseFloat(document.getElementById(`qz${i}Raw${subject}`).value) || 0;
+                    const maxScore = parseFloat(document.getElementById(`qz${i}Max${subject}`).value) || 0;
+                    quizTotal += (rawScore / maxScore) || 0;
+                }
+                quizTotal /= numWrittenWorks;
+
+                const examScore = parseFloat(document.getElementById(`exam${subject}`).value) || 0;
+                const examMaxScore = parseFloat(document.getElementById(`examScore${subject}`).value) || 0;
+                const exam = (examScore / examMaxScore) || 0;
+
+                const ptScore = parseFloat(document.getElementById(`pt1${subject}`).value) || 0;
+                const ptMaxScore = parseFloat(document.getElementById(`pt1Score${subject}`).value) || 0;
+                const pt = (ptScore / ptMaxScore) || 0;
+
+                const quizWeight = 0.25;
+                const examWeight = 0.25;
+                const ptWeight = 0.5;
+
+                const overallGrade = (quizTotal * quizWeight) + (exam * examWeight) + (pt * ptWeight);
+
+                document.getElementById(`result${subject}`).innerText = `Overall Grade: ${(overallGrade * 100).toFixed(2)}%`;
+            }
+        </script>
+
+
+        <!-- Collapsible -->
+        <div class="container" style="height: 1000px;">
+            <div class="row">
+                <div class="subjects s12 m12 l12 center" style="background-color:#022a12; border-radius: 25px; margin-top: 150px;">
+                    <h3 class="subjects-text">SUBJECTS</h3>
+                </div>
+            </div>
+            <p style="font-size: 20px;"><b>Instruction:</b> Click on one panel to begin tracking.</p>
+            <ul class="collapsible">
+                <!-- General Chemistry 2 -->
+                <li>
+                    <div class="collapsible-header">
+                        <i class="material-icons">whatshot</i>General Chemistry 2
+                    </div>
+                    <div class="collapsible-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col s12 m6 l4">
+                                    <span>Written Works</span>
+                                    <input type="number" id="numWrittenWorksChemistry" placeholder="Number of Written Works" onchange="generateWrittenWorksInputs('Chemistry')"/>
+                                    <div id="WrittenWorksInputsChemistry"></div>
+                                </div>
+                                <div class="col s12 m6 l4">
+                                    <span>Exam</span>
+                                    <div class="row">
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="examChemistry" placeholder="Your Exam Score"/>
+                                        </div>
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="examScoreChemistry" placeholder="Total Exam Score"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col s12 m6 l4">
+                                    <span>Performance Task</span>
+                                    <div class="row">
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="pt1Chemistry" placeholder="Your PT Score"/>
+                                        </div>
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="pt1ScoreChemistry" placeholder="Total PT Score"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button onclick="calculateGrade('Chemistry')">Calculate Grade</button>
+                                <p id="resultChemistry"></p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <!-- General Physics 2 -->
+                <li>
+                    <div class="collapsible-header">
+                        <i class="material-icons">whatshot</i>General Physics 2
+                    </div>
+                    <div class="collapsible-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col s12 m6 l4">
+                                    <span>Written Works</span>
+                                    <input type="number" id="numWrittenWorksPhysics" placeholder="Number of Written Works" onchange="generateWrittenWorksInputs('Physics')"/>
+                                    <div id="WrittenWorksInputsPhysics"></div>
+                                </div>
+                                <div class="col s12 m6 l4">
+                                    <span>Exam</span>
+                                    <div class="row">
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="examPhysics" placeholder="Your Exam Score"/>
+                                        </div>
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="examScorePhysics" placeholder="Total Exam Score"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col s12 m6 l4">
+                                    <span>Performance Task</span>
+                                    <div class="row">
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="pt1Physics" placeholder="Your PT Score"/>
+                                        </div>
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="pt1ScorePhysics" placeholder="Total PT Score"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button onclick="calculateGrade('Physics')">Calculate Grade</button>
+                                <p id="resultPhysics"></p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <!-- Research Capstone -->
+                <li>
+                    <div class="collapsible-header">
+                        <i class="material-icons">whatshot</i>Research Capstone
+                    </div>
+                    <div class="collapsible-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col s12 m6 l4">
+                                    <span>Written Works</span>
+                                    <input type="number" id="numWrittenWorksCapstone" placeholder="Number of Written Works" onchange="generateWrittenWorksInputs('Capstone')"/>
+                                    <div id="WrittenWorksInputsCapstone"></div>
+                                </div>
+                                <div class="col s12 m6 l4">
+                                    <span>Exam</span>
+                                    <div class="row">
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="examCapstone" placeholder="Your Exam Score"/>
+                                        </div>
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="examScoreCapstone" placeholder="Total Exam Score"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col s12 m6 l4">
+                                    <span>Performance Task</span>
+                                    <div class="row">
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="pt1Capstone" placeholder="Your PT Score"/>
+                                        </div>
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="pt1ScoreCapstone" placeholder="Total PT Score"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button onclick="calculateGrade('Capstone')">Calculate Grade</button>
+                                <p id="resultCapstone"></p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="collapsible-header">
+                        <i class="material-icons">whatshot</i>Research Project
+                    </div>
+                    <div class="collapsible-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col s12 m6 l4">
+                                    <span>Written Works</span>
+                                    <input type="number" id="numWrittenWorksProject" placeholder="Number of Written Works" onchange="generateWrittenWorksInputs('Project')"/>
+                                    <div id="WrittenWorksInputsProject"></div>
+                                </div>
+                                <div class="col s12 m6 l4">
+                                    <span>Exam</span>
+                                    <div class="row">
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="examProject" placeholder="Your Exam Score"/>
+                                        </div>
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="examScoreProject" placeholder="Total Exam Score"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col s12 m6 l4">
+                                    <span>Performance Task</span>
+                                    <div class="row">
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="pt1Project" placeholder="Your PT Score"/>
+                                        </div>
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="pt1ScoreProject" placeholder="Total PT Score"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button onclick="calculateGrade('Project')">Calculate Grade</button>
+                                <p id="resultProject"></p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="collapsible-header">
+                        <i class="material-icons">whatshot</i>Contemporary Philippine Art from the Region
+                    </div>
+                    <div class="collapsible-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col s12 m6 l4">
+                                    <span>Written Works</span>
+                                    <input type="number" id="numWrittenWorksCPAR" placeholder="Number of Written Works" onchange="generateWrittenWorksInputs('CPAR')"/>
+                                    <div id="WrittenWorksInputsCPAR"></div>
+                                </div>
+                                <div class="col s12 m6 l4">
+                                    <span>Exam</span>
+                                    <div class="row">
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="examCPAR" placeholder="Your Exam Score"/>
+                                        </div>
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="examScoreCPAR" placeholder="Total Exam Score"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col s12 m6 l4">
+                                    <span>Performance Task</span>
+                                    <div class="row">
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="pt1CPAR" placeholder="Your PT Score"/>
+                                        </div>
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="pt1ScoreCPAR" placeholder="Total PT Score"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button onclick="calculateGrade('CPAR')">Calculate Grade</button>
+                                <p id="resultCPAR"></p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <!-- Web Development -->
+                <li>
+                    <div class="collapsible-header">
+                        <i class="material-icons">whatshot</i>Web Development
+                    </div>
+                    <div class="collapsible-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col s12 m6 l4">
+                                    <span>Written Works</span>
+                                    <input type="number" id="numWrittenWorksWebDev" placeholder="Number of Written Works" onchange="generateWrittenWorksInputs('WebDev')"/>
+                                    <div id="WrittenWorksInputsWebDev"></div>
+                                </div>
+                                <div class="col s12 m6 l4">
+                                    <span>Exam</span>
+                                    <div class="row">
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="examWebDev" placeholder="Your Exam Score"/>
+                                        </div>
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="examScoreWebDev" placeholder="Total Exam Score"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col s12 m6 l4">
+                                    <span>Performance Task</span>
+                                    <div class="row">
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="pt1WebDev" placeholder="Your PT Score"/>
+                                        </div>
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="pt1ScoreWebDev" placeholder="Total PT Score"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button onclick="calculateGrade('WebDev')">Calculate Grade</button>
+                                <p id="resultWebDev"></p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <!-- Empowerment Technology -->
+                <li>
+                    <div class="collapsible-header">
+                        <i class="material-icons">whatshot</i>Empowerment Technology
+                    </div>
+                    <div class="collapsible-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col s12 m6 l4">
+                                    <span>Written Works</span>
+                                    <input type="number" id="numWrittenWorksEmpowerment" placeholder="Number of Written Works" onchange="generateWrittenWorksInputs('Empowerment')"/>
+                                    <div id="WrittenWorksInputsEmpowerment"></div>
+                                </div>
+                                <div class="col s12 m6 l4">
+                                    <span>Exam</span>
+                                    <div class="row">
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="examEmpowerment" placeholder="Your Exam Score"/>
+                                        </div>
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="examScoreEmpowerment" placeholder="Total Exam Score"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col s12 m6 l4">
+                                    <span>Performance Task</span>
+                                    <div class="row">
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="pt1Empowerment" placeholder="Your PT Score"/>
+                                        </div>
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="pt1ScoreEmpowerment" placeholder="Total PT Score"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button onclick="calculateGrade('Empowerment')">Calculate Grade</button>
+                                <p id="resultEmpowerment"></p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <!-- P.E 4 -->
+                <li>
+                    <div class="collapsible-header">
+                        <i class="material-icons">whatshot</i>Physical Education 4
+                    </div>
+                    <div class="collapsible-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col s12 m6 l4">
+                                    <span>Written Works</span>
+                                    <input type="number" id="numWrittenWorksPE" placeholder="Number of Written Works" onchange="generateWrittenWorksInputs('PE')"/>
+                                    <div id="WrittenWorksInputsPE"></div>
+                                </div>
+                                <div class="col s12 m6 l4">
+                                    <span>Exam</span>
+                                    <div class="row">
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="examPE" placeholder="Your Exam Score"/>
+                                        </div>
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="examScorePE" placeholder="Total Exam Score"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col s12 m6 l4">
+                                    <span>Performance Task</span>
+                                    <div class="row">
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="pt1PE" placeholder="Your PT Score"/>
+                                        </div>
+                                        <div class="col s6 m6 l6">
+                                            <input type="number" id="pt1ScorePE" placeholder="Total PT Score"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button onclick="calculateGrade('PE')">Calculate Grade</button>
+                                <p id="resultPE"></p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    
+        <!-- Footer -->
+        <footer id="Contact" class="page-footer" style="background-color: #023B1A">
+            <div class="container">
+                <div class="row">
+                    <div class="col s12 l6 s12"><br>
+                        <a href="" class="footer-logo">
+                            <img src="ImageSources/Web-Logo-White.png" alt="logo" class="responsive-img" width="200" height="200">
+                        </a>
+                        <p style="color: #ffffff; font-size: 20px;">𝐄𝐦𝐚𝐢𝐥: <u>studyflowhub@gmail.com</u></p>
+                        <p style="color: #ffffff; font-size: 20px;">𝐂𝐨𝐧𝐭𝐚𝐜𝐭: (63+) 987-6543-210</p>
+                    </div>
+
+                    <!-- Socials -->
+                    <br>
+                    <div class="col s12 l4 offset-l2 ">
+                        <h4 style="color: #ffffff; font-weight: bold;">𝗦𝗢𝗖𝗜𝗔𝗟𝗦</h4>
+                        <ul class="left-align"><br>
+                            <li> 
+                                <a href="https://www.instagram.com/" style="font-size: 20px; color: #ffffff">
+                                    <i class="fa-brands fa-instagram fa-2xl" style="color: #ffffff"></i>
+                                    &nbsp;&nbsp;&nbsp;𝐈𝐧𝐬𝐭𝐚𝐠𝐫𝐚𝐦
+                                </a>
+                            </li>
+                            <p></p><br>
+                            <li> 
+                                <a href="https://www.facebook.com/" style="font-size: 20px; color: #ffffff">
+                                    <i class="fa-brands fa-facebook fa-2xl" style="color: #ffffff"></i>
+                                    &nbsp;&nbsp;𝐅𝐚𝐜𝐞𝐛𝐨𝐨𝐤
+                                </a>
+                            </li>
+                            <p></p><br>
+                            <li> 
+                                <a href="https://www.tiktok.com/" style="font-size: 20px; color: #ffffff">
+                                    <i class="fa-brands fa-tiktok fa-2xl" style="color: #ffffff"></i>
+                                    &nbsp;&nbsp;&nbsp;𝐓𝐢𝐤𝐭𝐨𝐤
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-copyright center">
+                <div class="container " style="color: #ffffff; font-size: 20px;">
+                <hr>
+                   𝗖𝗼𝗽𝘆𝗿𝗶𝗴𝗵𝘁 (𝗰) 𝟮𝟬𝟮𝟰 | @ 𝗦𝘁𝘂𝗱𝘆 𝗙𝗹𝗼𝘄 𝗛𝘂𝗯
+                </div>
+            </div>
+        </footer>
+
+
+        <!-- jquery cdn -->
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+        <!-- Compiled and minified JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+        <script>
+            
+            $(document).ready(function(){
+                $('.sidenav').sidenav();
+            });
+
+            //Collapsible
+            $(document).ready(function(){
+                $('.collapsible').collapsible();
+            });
+            
+        </script>
+    </body>
+</html>
